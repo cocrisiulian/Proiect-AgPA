@@ -1,0 +1,62 @@
+# Visual Studio / MSVC build artifacts
+*.vcxproj*
+*.sln*
+*.user
+*.suo
+*.opensdf
+*.sdf
+*.cache
+*.log
+*.pdb
+*.ipch
+*.obj
+*.idb
+*.ilk
+*.iobj
+*.ipdb
+*.ncb
+*.vcxproj.user
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+CMakeLists.txt.user
+install_manifest.txt
+
+# Build directories
+build/
+build-mpi/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pyi
+.pytest_cache/
+
+# Python virtual environments
+venv/
+env/
+.venv/
+
+# Runtime output files
+output_final.ppm
+output_final_mpi.ppm
+output_step_*.ppm
+benchmark_results.json
+benchmark_plots.png
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.continue/
+.idea/
+*.swp
+*~
