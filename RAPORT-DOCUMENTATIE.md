@@ -1,6 +1,6 @@
 ﻿# Simularea Paralela a Furnicii lui Langton cu MPI
 
-## Raport de Proiect - Algoritmi Paraleli
+## Raport de Proiect - Algoritmi Paraleli Avansati
 
 **Autor:** Iulian Cocriș
 
@@ -38,19 +38,25 @@ Proiectul conține următoarele componente principale:
 
 ### 2.1 Comportament și output
 
-Simularea produce imagini PPM ale stării finale și ale snapshot-urilor la pași regulați. Fiecare celulă are o stare binară: albă sau neagră, iar furnicile sunt reprezentate în roșu în output-ul vizual.
+Output-ul principal al simulării este o imagine care reprezintă starea finală a grilei, fie pentru varianta secvențială, fie pentru varianta MPI.
 
-Snapshot-urile PPM sunt opționale și se activează prin parametrul `-k`. Aceste fișiere permit urmărirea evoluției simulării la intervale de timp prestabilite.
+- `output_final.ppm` este imaginea generată de rularea secvențială.
+- `output_final_mpi.ppm` este imaginea generată de rularea MPI.
+- Snapshot-urile PPM intermediare sunt opționale și se activează cu parametrul `-k`; ele permit urmărirea evoluției simulării la pași fixați.
 
-Imagine finală secvențială:
+În aceste imagini:
 
-![Imagine finală secvențială](output_final.ppm)
+- celulele albe și negre reflectă starea binară a grilei;
+- furnicile sunt marcate în roșu pentru a evidenția poziția și direcția lor curentă;
+- forma finală a pattern-ului exprimă întreaga istorie a salturilor și inversărilor de culoare pe care le-a parcurs furnica.
 
-Imagine finală MPI:
+Cele două capturi de ecran folosite în raport ilustrează același rezultat de finalizare:
 
-![Imagine finală MPI](output_final_mpi.ppm)
+- prima imagine arată rularea secvențială, cu un singur proces și structura finală a câmpului de celule;
+- a doua imagine arată rularea MPI cu 4 procese, demonstrând că ieșirea vizuală este identică ca pattern, ceea ce confirmă corectitudinea paralelizării.
 
----
+<pre class="vditor-reset" placeholder="" contenteditable="true" spellcheck="false"><p data-block="0"><br class="Apple-interchange-newline"/><img src="https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/Iulian/Desktop/AgPA/Proiect-EXAMEN/benchmark_plots.png" alt="Benchmark plots"/></p></pre>
+
 
 ## 3. Fundamentele Langton's Ant
 
@@ -214,12 +220,13 @@ Interpretare:
 Explicare termeni:
 
 - `ghost rows`
+
   - Fiecare proces deține doar un bloc de rânduri din grila globală.
   - Pentru a calcula starea celulelor de frontieră, procesul trebuie să cunoască valorile rândurilor adiacente de la procesul vecin.
   - Aceste rânduri adiacente se numesc `ghost rows` și sunt schimbate în mod repetat între procese cu `MPI_Sendrecv`.
   - Comunicarea acestor rânduri introduce latență și overhead de bandă, mai ales când procesele sunt multe.
-
 - `exportul PPM periodic`
+
   - Dacă aplicația scrie imagini PPM la intervale regulate (`-k`), atunci procesul MPI trebuie să colecteze sau să combine datele din toate procesele și să scrie un fișier global.
   - Scrierea PPM este o operație de I/O costisitoare și poate bloca execuția dacă se face frecvent.
   - Sincronizarea necesară pentru a produce o imagine coerentă din date parțiale crește overhead-ul în MPI.
